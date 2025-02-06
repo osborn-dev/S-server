@@ -1,15 +1,23 @@
 const path = require('path')
 const express = require('express')
 require('colors')
+const cors = require('cors')
 const dotenv = require('dotenv').config()
 const { errorHandler } = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 const PORT = process.env.PORT || 5000
 
+
+
 // Connect to database
 connectDB()
 
 const app = express()
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001', 
+    credentials: true,
+  }))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -26,7 +34,7 @@ app.use('/api/tickets', require('./routes/ticketRoutes'))
 //   // FIX: below code fixes app crashing on refresh in deployment
 //   app.get('*', (_, res) => {
 //     res.sendFile(path.join(__dirname, '../frontend/build/index.html'))
-//   })
+//   })git
 // } else {
 //   app.get('/', (_, res) => {
 //     res.status(200).json({ message: 'Welcome to the Support Desk API' })
